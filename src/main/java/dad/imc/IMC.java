@@ -32,6 +32,8 @@ public class IMC extends Application {
 	private DoubleProperty peso = new SimpleDoubleProperty();
 	private DoubleProperty altura = new SimpleDoubleProperty();
 	private DoubleProperty salida = new SimpleDoubleProperty();
+	
+	private String imcText;
 
 
 	@Override
@@ -76,19 +78,29 @@ public class IMC extends Application {
 		
 		salida.bind(peso.divide((altura.divide(100).multiply(altura.divide(100)))));
 		
-	
+		StringExpression imc2 = 
+				Bindings.concat(Bindings.when(altura.isEqualTo(0))
+						.then("Bajo peso | Normal | Sobrepeso | Obeso")
+						.otherwise(imcText + "2"));
+		textLabel.textProperty().bind(imc2);
+		
+		
 		salida.addListener((o, ov, nv) ->  { 
 			double salidavalue = salida.doubleValue();
 			if(salidavalue < 18.5) {
-				System.out.println("BAJO PESO");
+				//textLabel.textProperty().set("Bajo Peso");
+				imcText = "Bajo Peso";
 			}else if(salidavalue >= 18.5 && salidavalue < 25){
-				System.out.println("Normal");
+				//textLabel.textProperty().set("Normal");
+				imcText = "Normal";
 			}else if(salidavalue >= 25 && salidavalue < 30){
-				System.out.println("Sobrepeso");
+				//textLabel.textProperty().set("Sobrepeso");
+				imcText = "Sobrepeso";
 			}else if(salidavalue >= 30) {
-				System.out.println("Obeso");
+				//textLabel.textProperty().set("Obeso");
+				imcText = "Obeso";
+
 			}
-			System.out.println(salidavalue);
 		});
 		
 	}
