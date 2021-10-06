@@ -33,7 +33,7 @@ public class IMC extends Application {
 	private DoubleProperty altura = new SimpleDoubleProperty();
 	private DoubleProperty salida = new SimpleDoubleProperty();
 	
-	private String imcText;
+	private Label imcText;
 
 
 	@Override
@@ -50,6 +50,7 @@ public class IMC extends Application {
 		
 		imcLabel = new Label("IMC: ");
 		textLabel = new Label("Bajo peso | Normal | Sobrepeso | Obeso");
+		imcText = new Label();
 		
 		HBox h1 = new HBox(5, pesoLabel, pesoText, kgLabel);
 		HBox h2 = new HBox(5, alturaLabel ,alturaText, cmLabel);
@@ -67,44 +68,40 @@ public class IMC extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
-		StringExpression imcExpression = 
-				Bindings.concat("IMC: ")
-				.concat(Bindings.concat(Bindings.when(altura.isEqualTo(0)).then("(peso*altura^2)").otherwise(salida.asString())));
-		
-		imcLabel.textProperty().bind(imcExpression);
-		
 		Bindings.bindBidirectional(pesoText.textProperty(), peso, new NumberStringConverter());
 		Bindings.bindBidirectional(alturaText.textProperty(), altura, new NumberStringConverter());
 		
 		salida.bind(peso.divide((altura.divide(100).multiply(altura.divide(100)))));
 		
+		StringExpression imcExpression = 
+				Bindings.concat("IMC: ")
+				.concat(Bindings.concat(Bindings.when(altura.isEqualTo(0)).then("(peso*altura^2)").otherwise(salida.asString("%.2f"))));
+		
+		imcLabel.textProperty().bind(imcExpression);
+		
+		
 		StringExpression imc2 = 
 				Bindings.concat(Bindings.when(altura.isEqualTo(0))
 						.then("Bajo peso | Normal | Sobrepeso | Obeso")
-						.otherwise(imcText + "2"));
+						.otherwise(imcText.textProperty()));
 		textLabel.textProperty().bind(imc2);
 		
 		
 		salida.addListener((o, ov, nv) ->  { 
 			double salidavalue = salida.doubleValue();
 			if(salidavalue < 18.5) {
-				//textLabel.textProperty().set("Bajo Peso");
-				imcText = "Bajo Peso";
+				imcText.textProperty().set("Bajo Peso");
 			}else if(salidavalue >= 18.5 && salidavalue < 25){
-				//textLabel.textProperty().set("Normal");
-				imcText = "Normal";
+				imcText.textProperty().set("Normal");
 			}else if(salidavalue >= 25 && salidavalue < 30){
-				//textLabel.textProperty().set("Sobrepeso");
-				imcText = "Sobrepeso";
+				imcText.textProperty().set("Sobrepeso");
 			}else if(salidavalue >= 30) {
-				//textLabel.textProperty().set("Obeso");
-				imcText = "Obeso";
-
+				imcText.textProperty().set("Obeso");
 			}
 		});
 		
 	}
-	
+
 	
 	public static void main(String[] args) {
 		launch(args);
