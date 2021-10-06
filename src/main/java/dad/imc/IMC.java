@@ -67,7 +67,7 @@ public class IMC extends Application {
 		
 		StringExpression imcExpression = 
 				Bindings.concat("IMC: ")
-				.concat(salida.asString());
+				.concat(Bindings.concat(Bindings.when(altura.isEqualTo(0)).then("(peso*altura^2)").otherwise(salida.asString())));
 		
 		imcLabel.textProperty().bind(imcExpression);
 		
