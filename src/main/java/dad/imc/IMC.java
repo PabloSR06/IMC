@@ -40,7 +40,11 @@ public class IMC extends Application {
 	public void start(Stage primaryStage) throws Exception {
 
 		pesoText = new TextField();
+		pesoText.setPrefWidth(60);
+		
 		alturaText = new TextField();
+		alturaText.setPrefWidth(60);
+		
 		
 		pesoLabel = new Label("Peso: ");
 		alturaLabel = new Label("Altura :");
@@ -62,7 +66,7 @@ public class IMC extends Application {
 		root.getChildren().addAll(h1, h2, h3, textLabel);
 		
 		
-		Scene scene = new Scene(root, 400, 300);
+		Scene scene = new Scene(root, 300, 200);
 		
 		primaryStage.setTitle("IMC");
 		primaryStage.setScene(scene);
