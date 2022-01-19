@@ -1,5 +1,10 @@
 package dad.imc;
 
+import org.controlsfx.validation.Severity;
+import org.controlsfx.validation.ValidationResult;
+import org.controlsfx.validation.ValidationSupport;
+import org.controlsfx.validation.Validator;
+
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleExpression;
@@ -71,6 +76,16 @@ public class IMC extends Application {
 		primaryStage.setTitle("IMC");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		
+		
+
+		ValidationSupport support = new ValidationSupport();
+	    support.registerValidator(pesoText, true, new Validador(600, "El peso no puede ser superior a 600 kg ni 0"));
+	    support.registerValidator(alturaText, true, new Validador(290, "La altura no puede ser superior a 290 cm ni 0"));
+	    support.invalidProperty().addListener((o, ov, nv) -> System.out.println(nv ? "is invalid" : "is valid"));
+		
+		
+		
 		
 		Bindings.bindBidirectional(pesoText.textProperty(), peso, new NumberStringConverter());
 		Bindings.bindBidirectional(alturaText.textProperty(), altura, new NumberStringConverter());
